@@ -32,8 +32,11 @@ def main():
     fetch = (context or {}).get("fetch_leads") or {}
     result = fetch.get("result") or {}
     rows = []
+    # Zoho can return {"data":[...]} or nested {"result":{"data":[...]}}
     if isinstance(result, dict):
         data = result.get("data")
+        if not isinstance(data, list) and isinstance(result.get("result"), dict):
+            data = result["result"].get("data")
         if isinstance(data, list):
             rows = data
 

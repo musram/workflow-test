@@ -22,8 +22,14 @@ def main() -> int:
     fetch = (ctx or {}).get("fetch_leads") or {}
     result = (fetch or {}).get("result") or {}
     data = []
-    if isinstance(result, dict) and isinstance(result.get("data"), list):
-        data = result.get("data") or []
+    if isinstance(result, dict):
+        d = result.get("data")
+        if isinstance(d, list):
+            data = d
+        elif isinstance(result.get("result"), dict):
+            d = result["result"].get("data")
+            if isinstance(d, list):
+                data = d
 
     # Keep items reasonably small/stable: include id + a few common fields.
     items = []
